@@ -44,9 +44,12 @@ class JWTController extends Controller
             'password' => Hash::make($request->password)
         ]);
 
+        $token = auth('api')->attempt($validator->validated());
+
         return response()->json([
             'message' => 'User successfully registered',
-            'user' => $user
+            'user' => $user,
+            'access_token' => $token
         ], 201);
     }
 
