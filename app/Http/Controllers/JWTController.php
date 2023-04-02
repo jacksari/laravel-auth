@@ -17,7 +17,7 @@ class JWTController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        // $this->middleware('jwt.verify', ['except' => ['login', 'register']]);
     }
 
     /**
@@ -100,8 +100,9 @@ class JWTController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function profile()
+    public function profile(Request $request)
     {
+        // return 'Hola';
         return response()->json(auth('api')->user());
     }
 

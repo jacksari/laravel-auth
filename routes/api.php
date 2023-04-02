@@ -20,10 +20,28 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::group(['middleware' => 'api'], function ($router) {
+Route::get('/', function () {
+    $data = [
+        'message' => "Welcome to our API"
+    ];
+    return response()->json($data, 200);
+})->name('welcome');
+
+Route::group(['prefix' => 'auth'], function ($router) {
+
     Route::post('/register', [JWTController::class, 'register']);
     Route::post('/login', [JWTController::class, 'login']);
-    Route::post('/logout', [JWTController::class, 'logout']);
-    Route::post('/refresh', [JWTController::class, 'refresh']);
-    Route::post('/profile', [JWTController::class, 'profile']);
+
+    Route::group(['middleware' => ['jwt.verify']], function ($router) {
+        Route::post('/logout', [JWTController::class, 'logout']);
+        Route::post('/refresh', [JWTController::class, 'refresh']);
+        Route::post('/profile', [JWTController::class, 'profile']);
+    });
+});
+
+
+//Rutas publicas
+
+// Rutas protegidas
+Route::group(['middleware' => ['jwt.verify']], function ($router) {
 });
